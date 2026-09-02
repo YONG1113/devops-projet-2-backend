@@ -4,6 +4,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -26,11 +27,11 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
 
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    @ExceptionHandler(value = {BadCredentialsException.class})
-    protected ResponseEntity<Object> handleBadCredentialsException(BadCredentialsException badCredentialsException,
+    @ExceptionHandler(value = {BadCredentialsException.class, UsernameNotFoundException.class})
+    protected ResponseEntity<Object> handleAuthenticationException(RuntimeException authenticationException,
                                                                    WebRequest request) {
-        logError(badCredentialsException);
-        return handleExceptionInternal(badCredentialsException, getErrorDetails(badCredentialsException, request),
+        logError(authenticationException);
+        return handleExceptionInternal(authenticationException, getErrorDetails(authenticationException, request),
                 new HttpHeaders(), HttpStatus.UNAUTHORIZED, request);
     }
 
