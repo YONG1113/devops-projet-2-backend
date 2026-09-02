@@ -1,4 +1,6 @@
 spring:
+  config:
+    import: optional:file:.env.local[.properties]
   application:
     name: etudiant-backend
   jpa:
@@ -29,3 +31,7 @@ management:
     web:
       exposure:
         include: '*'
+
+jwt:
+  secret: ${JWT_SECRET}
+  expiration-ms: ${JWT_EXPIRATION_MS:3600000}
